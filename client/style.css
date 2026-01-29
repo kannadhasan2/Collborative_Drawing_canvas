@@ -90,10 +90,11 @@ body {
 .main-content {
     display: flex;
     min-height: 800px;
+    flex-shrink: 2;
 }
 
 .sidebar {
-    width: 280px;
+    width: 250px;
     background: #f8f9fa;
     padding: 25px;
     border-right: 1px solid #e9ecef;
@@ -152,8 +153,8 @@ body {
 
 .color-palette {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
     margin-bottom: 20px;
 }
 
@@ -249,4 +250,57 @@ body {
 
 .action-btn.danger:hover {
     border-color: #e74c3c;
+}
+
+.users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-item {
+    background: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.user-name {
+    font-size: 14px;
+    color: #495057;
+}
+
+.canvas-area {
+    flex: 1;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.canvas-container {
+    flex: 1;
+    background: #f8f9fa;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #e9ecef;
+}
+
+#drawing-canvas {
+    width: 100%;
+    height: 100%;
+    background: white;
+    cursor: crosshair;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
