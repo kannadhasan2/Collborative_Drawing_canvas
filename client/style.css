@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: "Roboto";
+    font-family: "Roboto",sans-serif;
     background: linear-gradient(120deg, #ffb0ce , #b87aff );
     min-height: 100vh;
     padding: 20px;
@@ -19,4 +19,69 @@ body {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     min-height: 95vh;
+}
+
+.header {
+    background: linear-gradient(90deg,#ffb0ce , #b87aff);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.header h1 i {
+    margin-right: 10px;
+}
+
+.status {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.status-indicator.connected {
+    background: rgba(46, 204, 113, 0.2);
+}
+
+.status-indicator.disconnected {
+    background: rgba(231, 76, 60, 0.2);
+}
+
+.status-indicator i {
+    font-size: 10px;
+}
+
+.status-indicator.connected i {
+    color: #2ecc71;
+}
+
+.status-indicator.disconnected i {
+    color: #e74c3c;
+}
+
+.user-count {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.user-count i {
+    margin-right: 5px;
 }
