@@ -186,3 +186,67 @@ body {
     border-radius: 8px;
     cursor: pointer;
 }
+.size-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#brush-size {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: #dee2e6;
+    outline: none;
+}
+
+#brush-size::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+}
+
+#brush-size-value {
+    font-weight: 600;
+    color: #495057;
+    min-width: 40px;
+}
+
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action-btn {
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.action-btn.danger {
+    color: #e74c3c;
+}
+
+.action-btn.danger:hover {
+    border-color: #e74c3c;
+}

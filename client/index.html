@@ -57,6 +57,31 @@
                         <input type="color" id="color-picker" value="#007aff">
                     </div>
                 </div>
+
+                <!-- Brush Size Indicator -->
+                 <div class="size-section">
+                    <h3><i class="fas fa-arrows-alt-v"></i> Brush Size</h3>
+                    <div class="size-controls">
+                        <input type="range" min="1" max="50" value="5">
+                        <span id="brush-size-value">5px</span>
+                    </div>
+                </div>
+
+                <!-- Undo, Redo, Clear Functionality -->
+                <div class="action-section">
+                    <h3><i class="fas fa-history"></i> Actions</h3>
+                    <div class="action-buttons">
+                        <button id="undo-btn" class="action-btn">
+                            <i class="fas fa-undo"></i> Undo
+                        </button>
+                        <button id="redo-btn" class="action-btn">
+                            <i class="fas fa-redo"></i> Redo
+                        </button>
+                        <button id="clear-btn" class="action-btn danger">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                </div>
             </aside>
         </div>
     </div>
