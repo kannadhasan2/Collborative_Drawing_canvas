@@ -85,3 +85,67 @@ body {
 .user-count i {
     margin-right: 5px;
 }
+
+
+.main-content {
+    display: flex;
+    min-height: 800px;
+}
+
+.sidebar {
+    width: 280px;
+    background: #f8f9fa;
+    padding: 25px;
+    border-right: 1px solid #e9ecef;
+    overflow-y: auto;
+}
+
+.tool-section,
+.color-section,
+.size-section,
+.action-section,
+.users-section {
+    margin-bottom: 30px;
+}
+
+.tool-section h3,
+.color-section h3,
+.size-section h3,
+.action-section h3,
+.users-section h3 {
+    font-size: 16px;
+    color: #495057;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tool-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.tool-btn {
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 20px;
+    color: #495057;
+}
+
+.tool-btn:hover {
+    border-color: #7cea66;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tool-btn.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
