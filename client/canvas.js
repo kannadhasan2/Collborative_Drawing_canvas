@@ -13,20 +13,20 @@ class DrawingCanvas{
         this.overlayCtx = this.overlay.getContext('2d')
         
         // Drawing state
-        this.isDrawing = false;
-        this.lastX = 0;
-        this.lastY = 0;
+        this.isDrawing = false
+        this.lastX = 0
+        this.lastY = 0
         this.currentColor = '#ff1e00';
-        this.currentTool = 'brush';
-        this.brushSize = 5;
+        this.currentTool = 'brush'
+        this.brushSize = 5
 
         // Shape drawing state
-        this.shapeStartX = 0;
-        this.shapeStartY = 0;
-        this.isDrawingShape = false;
-        this.currentShape = null;
-        this.tempCanvas = null;
-        this.tempCtx = null;
+        this.shapeStartX = 0
+        this.shapeStartY = 0
+        this.isDrawingShape = false
+        this.currentShape = null
+        this.tempCanvas = null
+        this.tempCtx = null
 
         this.setupCanvas()
         this.setupEventListeners()
@@ -62,7 +62,7 @@ class DrawingCanvas{
 
     setupEventListeners(){
         this.canvas.addEventListener("mousedown",(event) => this.startDrawing(event) )
-        this.canvas.addEventListener('mousemove', (event) => this.draw(event));
+        this.canvas.addEventListener('mousemove', (event) => this.draw(event))
 
     }
 
@@ -93,12 +93,12 @@ class DrawingCanvas{
         this.lastY = position.y 
         
         if (['line'].includes(this.currentTool)) {
-            this.isDrawingShape = true;
-            this.currentShape = this.currentTool;
+            this.isDrawingShape = true
+            this.currentShape = this.currentTool
             
             // Save current canvas state to temp canvas for preview
             this.tempCtx.clearRect(0, 0, this.tempCanvas.width, this.tempCanvas.height);
-            this.tempCtx.drawImage(this.canvas, 0, 0);
+            this.tempCtx.drawImage(this.canvas, 0, 0)
         }
     }
 
@@ -113,10 +113,10 @@ class DrawingCanvas{
         // Send cursor position to server
         console.log(window.websocketManager)
         if (window.websocketManager) {
-            const rect = this.canvas.getBoundingClientRect();
-            const displayX = e.clientX - rect.left;
-            const displayY = e.clientY - rect.top;
-            window.websocketManager.sendCursorPosition(displayX, displayY);
+            const rect = this.canvas.getBoundingClientRect()
+            const displayX = event.clientX - rect.left
+            const displayY = event.clientY - rect.top
+            //window.websocketManager.sendCursorPosition(displayX, displayY)
         }
 
 
@@ -133,6 +133,10 @@ class DrawingCanvas{
         }else{
             this.canvas.style.cursor = "crosshair"
         }
+    }
+
+    setColor(color){
+        this.currentColor = color
     }
 
 
