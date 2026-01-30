@@ -131,7 +131,7 @@ class UIManager {
         usernameDisplay.innerHTML = `
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div style="width: 12px; height: 12px; border-radius: 50%; background-color: ${window.websocketManager?.color || '#007aff'};"></div>
-                <span>${sessionStorage.getItem('username') || 'Guest'}</span>
+                <span>${window.websocketManager?.username  || 'Guest'}</span>
             </div>
         `;
         

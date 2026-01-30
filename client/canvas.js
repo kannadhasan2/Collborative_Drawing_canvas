@@ -30,6 +30,7 @@ class DrawingCanvas{
 
         this.setupCanvas()
         this.setupEventListeners()
+        this.resizeCanvas()
     }
 
     setupCanvas(){
@@ -58,6 +59,40 @@ class DrawingCanvas{
 
         // save to history
 
+    }
+
+    resizeCanvas() {
+        const resizeHandler = () => {
+            const container = this.canvas.parentElement;
+            
+            // Save current drawing to temp canvas
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = this.canvas.width;
+            tempCanvas.height = this.canvas.height;
+            tempCtx.drawImage(this.canvas, 0, 0);
+            
+            // Resize main canvas
+            this.canvas.width = container.clientWidth;
+            this.canvas.height = container.clientHeight;
+            
+            // Resize overlay canvas
+            this.overlay.width = container.clientWidth;
+            this.overlay.height = container.clientHeight;
+            
+            // Resize temp canvas
+            this.tempCanvas.width = container.clientWidth;
+            this.tempCanvas.height = container.clientHeight;
+            
+            // Restore drawing
+            this.ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 
+                             0, 0, this.canvas.width, this.canvas.height);
+            
+            // Clear overlay
+            this.overlayCtx.clearRect(0, 0, this.overlay.width, this.overlay.height);
+        };
+        
+        window.addEventListener('resize', resizeHandler.bind(this));
     }
 
     setupEventListeners(){

@@ -20,6 +20,10 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
+// Import room manager 
+const RoomManager = require("./rooms")
+const roomManager = new RoomManager(io)
+
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
