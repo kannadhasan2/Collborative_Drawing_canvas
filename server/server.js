@@ -24,6 +24,9 @@ app.get('*', (req, res) => {
 const RoomManager = require("./rooms")
 const roomManager = new RoomManager(io)
 
+const DrawingState =  require('./drawing-state')
+const draw = new DrawingState()
+
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {

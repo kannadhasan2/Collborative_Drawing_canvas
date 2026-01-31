@@ -22,9 +22,9 @@ class WebSocketManager {
         // Generate random user ID
         this.userId = 'user_' + Math.random().toString(36).substr(2, 9);
         let username = sessionStorage.getItem('username');
-        if (!username) {
-        username = prompt('Enter your Name') || 'Guest';
-        sessionStorage.setItem('username', username);
+        if (!username || username === 'Guest') {
+            username = prompt('Enter your Name') || 'Guest';
+            sessionStorage.setItem('username', username);
         }
         this.username = username;
         
@@ -113,6 +113,134 @@ class WebSocketManager {
         });
     }
 
+    sendCursorPosition(x, y) {
+        if (this.isConnected) {
+            this.socket.emit('cursor_update', {
+                x,
+                y,
+                userId: this.userId,
+                username: this.username,
+                color: this.color,
+                roomId: this.roomId
+            });
+        }
+    }
+
+    loadCanvasState(data) {
+        if (!window.canvas || !data || !data.imageData) return;
+        
+        const img = new Image();
+        img.onload = () => {
+            window.canvas.ctx.clearRect(0, 0, window.canvas.canvas.width, window.canvas.canvas.height);
+            window.canvas.ctx.drawImage(img, 0, 0);
+            
+            // Reset history
+            window.canvas.localHistory = [window.canvas.canvas.toDataURL()];
+            window.canvas.historyIndex = 0;
+            window.canvas.updateUndoRedoButtons();
+        };
+        img.src = data.imageData;
+    }
+
+    sendDrawing(drawingData) {
+        const drawingPacket = {
+            ...drawingData,
+            userId: this.userId,
+            roomId: this.roomId,
+            timestamp: Date.now()
+        };
+        
+        if (this.isConnected) {
+            this.socket.emit('drawing', drawingPacket);
+        } else {
+            // Store drawing locally until connected
+            this.pendingDrawings.push(drawingPacket);
+        }
+    }
+
+     applyRemoteDrawing(data) {
+        if (!window.canvas) return;
+        
+        const ctx = window.canvas.ctx;
+        
+        // Save current context state
+        const savedStrokeStyle = ctx.strokeStyle;
+        const savedLineWidth = ctx.lineWidth;
+        const savedCompositeOperation = ctx.globalCompositeOperation;
+        
+        // Apply drawing
+        ctx.strokeStyle = data.color;
+        ctx.lineWidth = data.size;
+        ctx.globalCompositeOperation = data.compositeOperation || 'source-over';
+        
+        if (data.type === 'draw') {
+            ctx.beginPath();
+            ctx.moveTo(data.points[0].x, data.points[0].y);
+            ctx.lineTo(data.points[1].x, data.points[1].y);
+            ctx.stroke();
+        } else if (data.type === 'shape') {
+            ctx.beginPath();
+            
+            switch (data.tool) {
+                case 'rectangle':
+                    const width = data.end.x - data.start.x;
+                    const height = data.end.y - data.start.y;
+                    ctx.fillRect(data.start.x, data.start.y, width, height);
+                    break;
+                    
+                case 'circle':
+                    const radius = Math.sqrt(
+                        Math.pow(data.end.x - data.start.x, 2) + 
+                        Math.pow(data.end.y - data.start.y, 2)
+                    );
+                    ctx.arc(data.start.x, data.start.y, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    break;
+                    
+                case 'line':
+                    ctx.moveTo(data.start.x, data.start.y);
+                    ctx.lineTo(data.end.x, data.end.y);
+                    ctx.stroke();
+                    break;
+            }
+        }
+        
+        // Restore context state
+        ctx.strokeStyle = savedStrokeStyle;
+        ctx.lineWidth = savedLineWidth;
+        ctx.globalCompositeOperation = savedCompositeOperation;
+        
+        // Update local history
+        window.canvas.saveToHistory();
+    }
+
+    handleGlobalAction(data) {
+        if (!window.canvas) return;
+        
+        switch (data.action) {
+            case 'undo':
+                window.canvas.undo();
+                break;
+            case 'redo':
+                window.canvas.redo();
+                break;
+            case 'clear':
+                window.canvas.clearCanvas();
+                break;
+        }
+    }
+
+    sendAction(action) {
+        if (this.isConnected) {
+            this.socket.emit('action', {
+                action,
+                userId: this.userId,
+                roomId: this.roomId,
+                timestamp: Date.now()
+            });
+        }
+    }
+
     processPendingDrawings() {
         if (!this.isConnected || this.isProcessing) return;
         
@@ -137,6 +265,43 @@ class WebSocketManager {
             statusElement.className = 'status-indicator disconnected';
             statusText.innerHTML = '<i class="fas fa-circle"></i> Disconnected';
         }
+    }
+
+    updateUsersList(users) {
+        const usersList = document.getElementById('users-list');
+        usersList.innerHTML = '';
+        
+        // Update user count
+        document.getElementById('user-count').textContent = users.length;
+        
+        // Add current user first
+        const currentUser = users.find(u => u.id === this.userId) || {
+            id: this.userId,
+            username: this.username,
+            color: this.color
+        };
+        
+        this.addUserToList(currentUser, true);
+        
+        // Add other users
+        users.forEach(user => {
+            if (user.id !== this.userId) {
+                this.addUserToList(user, false);
+            }
+        });
+    }
+    
+    addUserToList(user, isCurrent) {
+        const usersList = document.getElementById('users-list');
+        const userElement = document.createElement('div');
+        userElement.className = 'user-item';
+        userElement.innerHTML = `
+            <div class="user-color" style="background-color: ${user.color};"></div>
+            <div class="user-name">
+                ${user.username} ${isCurrent ? '(You)' : ''}
+            </div>
+        `;
+        usersList.appendChild(userElement);
     }
 
 }
