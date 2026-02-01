@@ -4,7 +4,7 @@ class WebSocketManager {
         this.userId = null;
         this.username = null;
         this.color = null;
-        this.roomId = 'default';
+        this.roomId = this.getRoomIdFromUrl();
         this.isConnected = false;
         this.pendingDrawings = [];
         this.isProcessing = false;
@@ -19,6 +19,21 @@ class WebSocketManager {
         this.connect()
         
     }
+
+    getRoomIdFromUrl() {
+        // Supports: /room/<id> or ?room=<id>
+        const url = new URL(window.location.href);
+
+        const qp = url.searchParams.get("room");
+        if (qp) return qp.trim() || "default";
+
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        const idx = parts.indexOf("room");
+        if (idx !== -1 && parts[idx + 1]) return parts[idx + 1];
+
+        return "default";
+    }
+
 
     generateUserData(){
         // Generate random user ID

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Collaborative Drawing Canvas</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -25,6 +25,10 @@
         <div class="main-content">
             <!-- Left Side bar -->
             <aside class="sidebar">
+                <div>
+                    <button id="create-new-room" class="room-button">Create Room</button>
+                </div>
+
                 <div class="tool-section">
                     <h3><i class="fas fa-pencil-alt"></i> Tools</h3>
                     <div class="tool-buttons">
@@ -110,9 +114,9 @@
     
     <!-- Scripts -->
      <script src="/socket.io/socket.io.js"></script>
-     <script src="./main.js"></script>
-     <script src="./canvas.js"></script>
-     <script src="./websocket.js"></script>
-     <script src="./ui.js"></script>
+     <script src="/main.js"></script>
+     <script src="/canvas.js"></script>
+     <script src="/websocket.js"></script>
+     <script src="/ui.js"></script>
 </body>
 </html>

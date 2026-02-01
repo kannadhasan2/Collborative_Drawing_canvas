@@ -101,6 +101,18 @@ body {
     overflow-y: auto;
 }
 
+.room-button {
+    background-image: linear-gradient(90deg, #d39dd9, #a689f4);
+    width: 100%;
+    border: none;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 18px;
+    padding: 5px;
+    border-radius: 20px;
+}
+
 .tool-section,
 .color-section,
 .size-section,
