@@ -181,27 +181,10 @@ class WebSocketManager {
         } else if (data.type === 'shape') {
             ctx.beginPath();
             
-            switch (data.tool) {
-                case 'rectangle':
-                    const width = data.end.x - data.start.x;
-                    const height = data.end.y - data.start.y;
-                    ctx.fillRect(data.start.x, data.start.y, width, height);
-                    break;
-                    
-                case 'circle':
-                    const radius = Math.sqrt(
-                        Math.pow(data.end.x - data.start.x, 2) + 
-                        Math.pow(data.end.y - data.start.y, 2)
-                    );
-                    ctx.arc(data.start.x, data.start.y, radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    break;
-                    
-                case 'line':
-                    ctx.moveTo(data.start.x, data.start.y);
-                    ctx.lineTo(data.end.x, data.end.y);
-                    ctx.stroke();
-                    break;
+            if (data.tool === 'line') {
+                ctx.moveTo(data.start.x, data.start.y);
+                ctx.lineTo(data.end.x, data.end.y);
+                ctx.stroke();
             }
         }
         

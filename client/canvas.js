@@ -38,6 +38,14 @@ class DrawingCanvas{
         this.setupCanvas()
         this.setupEventListeners()
         this.resizeCanvas()
+        
+        // Animation loop for FPS calculation
+        this.lastTime = 0;
+        this.fps = 60;
+        this.frameCount = 0;
+        this.startTime = performance.now();
+        
+        this.animate();
     }
 
     setupCanvas(){
@@ -92,8 +100,7 @@ class DrawingCanvas{
             this.tempCanvas.height = container.clientHeight;
             
             // Restore drawing
-            this.ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 
-                             0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height,0, 0, this.canvas.width, this.canvas.height);
             
             // Clear overlay
             this.overlayCtx.clearRect(0, 0, this.overlay.width, this.overlay.height);
@@ -140,7 +147,7 @@ class DrawingCanvas{
         this.lastY = position.y 
         this.shapeStartX = position.x;
         this.shapeStartY = position.y;
-        if (['line'].includes(this.currentTool)) {
+        if (this.currentTool === "line") {
             this.isDrawingShape = true
             this.currentShape = this.currentTool
             
@@ -221,32 +228,16 @@ class DrawingCanvas{
         // Draw preview shape
         this.ctx.beginPath();
         this.ctx.strokeStyle = this.currentColor;
-        this.ctx.fillStyle = this.currentColor + '80'; // Add transparency
+        this.ctx.fillStyle = this.currentColor;
         this.ctx.lineWidth = this.brushSize;
         
         const startX = this.shapeStartX;
         const startY = this.shapeStartY;
         
-        switch (this.currentShape) {
-            case 'rectangle':
-                const width = x - startX;
-                const height = y - startY;
-                this.ctx.strokeRect(startX, startY, width, height);
-                this.ctx.fillRect(startX, startY, width, height);
-                break;
-                
-            case 'circle':
-                const radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
-                this.ctx.arc(startX, startY, radius, 0, Math.PI * 2);
-                this.ctx.stroke();
-                this.ctx.fill();
-                break;
-                
-            case 'line':
+        if (this.currentShape === 'line') {
                 this.ctx.moveTo(startX, startY);
                 this.ctx.lineTo(x, y);
                 this.ctx.stroke();
-                break;
         }
     }
 
@@ -270,9 +261,9 @@ class DrawingCanvas{
         
         const now = Date.now();
         
-        // Remove stale cursors (older than 2 seconds)
+        // Remove stale cursors (older than 5 seconds)
         for (const [userId, cursor] of this.remoteCursors) {
-            if (now - cursor.lastUpdate > 2000) {
+            if (now - cursor.lastUpdate > 5000) {
                 this.remoteCursors.delete(userId);
             }
         }
@@ -296,8 +287,8 @@ class DrawingCanvas{
         // Draw username label
         this.overlayCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         this.overlayCtx.font = '12px Arial';
-        this.overlayCtx.textAlign = 'center';
-        this.overlayCtx.fillText(username, x, y - 15);
+        this.overlayCtx.textAlign = 'left';
+        this.overlayCtx.fillText(username, x, y - 10);
     }
 
 
@@ -438,5 +429,14 @@ class DrawingCanvas{
             redoBtn.disabled = this.historyIndex >= this.localHistory.length - 1;
             redoBtn.classList.toggle('disabled', this.historyIndex >= this.localHistory.length - 1);
         }
+    }
+
+    animate() {
+        const now = performance.now();
+        this.frameCount++;        
+        // Redraw cursors
+        this.drawCursors();
+        
+        requestAnimationFrame(this.animate.bind(this));
     }
 }

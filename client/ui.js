@@ -34,7 +34,6 @@ class UIManager {
 
     
     setupColorPicker() {
-        console.log(window.canvas)
         // Color palette
         const colorOptions = document.querySelectorAll('.color-option');
         colorOptions.forEach(option => {
