@@ -54,13 +54,14 @@ A real-time collaborative drawing application where multiple users can draw simu
 
 ### Keyboard Shortcuts
 - **Ctrl+Z:** Undo
-- **Ctrl+Shift+Z or Ctrl+Y:** Redo
+- **Ctrl+Y:** Redo
 
 ### Limitations
 - **Canvas Size:** Fixed to container size, doesn't support infinite canvas
 - **Performance:** May experience lag with very complex drawings on low-end devices
 - **Mobile Support:** Basic touch support but not fully optimized for mobile
 - **Offline Mode:** Drawing while disconnected is queued but not persisted
+- **undo/redo:** These functionalities work, but they are not perfect and still contain some bugs.
 
 ### Time Spent
 - **Planning & Architecture:** 5 hours
