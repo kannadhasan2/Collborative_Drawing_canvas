@@ -136,15 +136,9 @@ class RoomManager {
         
         room.historyIndex = room.drawingHistory.length - 1;
         
-        // Update current state
-        // Note: In a real implementation, we'd maintain the actual canvas state
-        // For now, we'll just store the last drawing
-        
         // Broadcast to other users in the room
         socket.to(roomId).emit('drawing', drawingData);
-        
-        // Also send back to sender for consistency
-        socket.emit('drawing', drawingData);
+
     }
 
     handleAction(socket, data) {

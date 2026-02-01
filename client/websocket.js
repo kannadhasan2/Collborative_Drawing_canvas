@@ -8,6 +8,8 @@ class WebSocketManager {
         this.isConnected = false;
         this.pendingDrawings = [];
         this.isProcessing = false;
+        this.lastRemoteSnapshotAt = 0;
+
         
         this.init();
     }
@@ -193,22 +195,27 @@ class WebSocketManager {
         ctx.lineWidth = savedLineWidth;
         ctx.globalCompositeOperation = savedCompositeOperation;
         
-        // Update local history
-        window.canvas.saveToHistory();
+        const now = Date.now();
+        if (now - this.lastRemoteSnapshotAt > 400) { // snapshot at most ~2.5/sec
+            window.canvas.saveToHistory();
+            this.lastRemoteSnapshotAt = now;
+        }
+
     }
 
     handleGlobalAction(data) {
         if (!window.canvas) return;
-        
+        if (data.userId === this.userId) return; // optional: ignore own echoed actions
+
         switch (data.action) {
-            case 'undo':
-                window.canvas.undo();
+            case 'undo': 
+                window.canvas.undo({ silent: true }); 
                 break;
-            case 'redo':
-                window.canvas.redo();
+            case 'redo': 
+                window.canvas.redo({ silent: true }); 
                 break;
-            case 'clear':
-                window.canvas.clearCanvas();
+            case 'clear': 
+                window.canvas.clearCanvas({ silent: true }); 
                 break;
         }
     }

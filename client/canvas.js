@@ -292,29 +292,42 @@ class DrawingCanvas{
     }
 
 
-    undo() {
-        if (this.historyIndex > 0) {
-            this.historyIndex--;
-            this.restoreFromHistory();
-            
-            // Send undo action to server
-            if (window.websocketManager && window.websocketManager.isConnected) {
-                window.websocketManager.sendAction('undo');
-            }
-        }
+    undo({ silent = false } = {}) {
+  if (this.historyIndex > 0) {
+    this.historyIndex--;
+    this.restoreFromHistory();
+
+    if (!silent && window.websocketManager?.isConnected) {
+      window.websocketManager.sendAction('undo');
     }
-    
-    redo() {
-        if (this.historyIndex < this.localHistory.length - 1) {
-            this.historyIndex++;
-            this.restoreFromHistory();
-            
-            // Send redo action to server
-            if (window.websocketManager && window.websocketManager.isConnected) {
-                window.websocketManager.sendAction('redo');
-            }
-        }
+  }
+}
+
+redo({ silent = false } = {}) {
+  if (this.historyIndex < this.localHistory.length - 1) {
+    this.historyIndex++;
+    this.restoreFromHistory();
+
+    if (!silent && window.websocketManager?.isConnected) {
+      window.websocketManager.sendAction('redo');
     }
+  }
+}
+
+clearCanvas({ silent = false } = {}) {
+  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  this.ctx.fillStyle = '#fff';
+  this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+  this.localHistory = [];
+  this.historyIndex = -1;
+  this.saveToHistory();
+
+  if (!silent && window.websocketManager?.isConnected) {
+    window.websocketManager.sendAction('clear');
+  }
+}
+
     
     restoreFromHistory() {
         const img = new Image();
@@ -327,20 +340,6 @@ class DrawingCanvas{
         this.updateUndoRedoButtons();
     }
     
-    clearCanvas(){
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = '#ffffff';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        this.localHistory = [];
-        this.historyIndex = -1;
-        this.saveToHistory();
-        
-        // Send clear action to server
-        if (window.websocketManager && window.websocketManager.isConnected) {
-            window.websocketManager.sendAction('clear');
-        }
-    }
 
     saveToHistory() {
         // Remove any future history if we're not at the end
