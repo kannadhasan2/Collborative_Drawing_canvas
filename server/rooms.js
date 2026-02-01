@@ -1,9 +1,9 @@
 class RoomManager {
-    constructor(io) {
+    constructor(io,drawState) {
         this.io = io;
         this.rooms = new Map(); // roomId -> Room object
         this.users = new Map(); // socketId -> User object
-        
+        this.drawState = drawState;
         this.setupSocketHandlers();
     }
 
@@ -135,6 +135,9 @@ class RoomManager {
         });
         
         room.historyIndex = room.drawingHistory.length - 1;
+
+        this.drawState.addOperation(roomId, drawingData);
+
         
         // Broadcast to other users in the room
         socket.to(roomId).emit('drawing', drawingData);
@@ -189,6 +192,9 @@ class RoomManager {
                 });
                 break;
         }
+
+        const ops = this.drawState.undo(roomId);
+        this.io.to(roomId).emit("state_update", ops);
     }
 
     handleDisconnect(socket) {

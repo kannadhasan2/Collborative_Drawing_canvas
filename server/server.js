@@ -20,12 +20,13 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
+//import drawing state
+const DrawingState = require('./drawing-state')
+const draw = new DrawingState()
+
 // Import room manager 
 const RoomManager = require("./rooms")
-const roomManager = new RoomManager(io)
-
-const DrawingState =  require('./drawing-state')
-const draw = new DrawingState()
+const roomManager = new RoomManager(io,draw)
 
 const PORT = process.env.PORT || 3000;
 
