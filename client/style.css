@@ -362,7 +362,8 @@ body {
 
 }
 
-.coordinates{
+.coordinates,
+.fps-counter {
     font-size: 14px;
     color: #6c757d;
     font-family: 'Courier New', monospace;

@@ -113,10 +113,41 @@ class DrawingCanvas{
         this.canvas.addEventListener("mousedown",(event) => this.startDrawing(event) )
         this.canvas.addEventListener('mousemove', (event) => this.draw(event))
         this.canvas.addEventListener('mouseup', (event) => this.stopDrawing(event));
-        this.canvas.addEventListener('mouseout',(event) => this.stopDrawing(event));
+        this.canvas.addEventListener('mouseout',(event) => this.stopDrawing(event))
 
         // Prevent context menu
-        this.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+        this.canvas.addEventListener('contextmenu', (event) => event.preventDefault());
+
+        // Touch events for mobile support
+        this.canvas.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            if (event.touches.length === 1) {
+                const touch = event.touches[0]
+                const mouseEvent = new MouseEvent('mousedown', {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+                this.canvas.dispatchEvent(mouseEvent)
+            }
+        }, { passive: false });
+        
+        this.canvas.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+            if (event.touches.length === 1) {
+                const touch = event.touches[0]
+                const mouseEvent = new MouseEvent('mousemove', {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+                this.canvas.dispatchEvent(mouseEvent);
+            }
+        }, { passive: false });
+        
+        this.canvas.addEventListener('touchend', (event) => {
+            event.preventDefault();
+            const mouseEvent = new MouseEvent('mouseup')
+            this.canvas.dispatchEvent(mouseEvent)
+        }, { passive: false });
 
     }
 
@@ -433,6 +464,20 @@ clearCanvas({ silent = false } = {}) {
     animate() {
         const now = performance.now();
         this.frameCount++;        
+
+        // Calculate FPS every second
+        if (now - this.startTime >= 1000) {
+            this.fps = this.frameCount;
+            this.frameCount = 0;
+            this.startTime = now;
+            
+            // Update FPS display
+            const fpsElement = document.getElementById('fps');
+            if (fpsElement) {
+                fpsElement.textContent = this.fps;
+            }
+        }
+
         // Redraw cursors
         this.drawCursors();
         

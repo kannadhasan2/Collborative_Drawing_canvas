@@ -7,6 +7,28 @@ document.addEventListener('DOMContentLoaded', () => {
         window.uiManager = new UIManager()
         // Initialize drawing canvas
         window.canvas = new DrawingCanvas('drawing-canvas', 'cursor-overlay')
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (event) => {
+            // Ctrl+Z for undo
+            if (event.ctrlKey  && event.key === 'z') {
+                event.preventDefault();
+                if (!event.shiftKey) {
+                    // Undo
+                    window.canvas.undo();
+                } else {
+                    // Redo (Ctrl+Shift+Z)
+                    window.canvas.redo();
+                }
+            }
+            
+            // Ctrl+Y for redo (alternative)
+            if (event.ctrlKey && event.key === 'y') {
+                event.preventDefault();
+                window.canvas.redo();
+            }
+        })
+        
         
         if (!window.canvas.canvas || !window.canvas.overlay) {
             throw new Error('Failed to initialize canvas. Canvas elements not found.');
