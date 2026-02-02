@@ -52,9 +52,7 @@ class WebSocketManager {
 
     connect() {
         // Connect to WebSocket server
-        const BACKEND_URL = "https://collborative-drawing-canvas.onrender.com/"
-        this.socket = io(BACKEND_URL,{
-            transports: ["websocket"],
+        this.socket = io({
             reconnection: true,
             reconnectionAttempts: 5,
             reconnectionDelay: 1000
