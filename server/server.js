@@ -12,13 +12,8 @@ const io = socketIo(server, {
     }
 });
 
-// Serve static files from client directory
-app.use(express.static(path.join(__dirname, '../client')));
+app.get("/health", (req, res) => res.json({ ok: true }));
 
-// Serve index.html for all routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/index.html'));
-});
 
 //import drawing state
 const DrawingState = require('./drawing-state')
