@@ -66,28 +66,7 @@ class DrawingState {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
     }
     
-    // For conflict resolution
-    resolveConflict(roomId, incomingOperation, existingOperations) {
-        // Simple timestamp-based resolution
-        // In production, you might want a more sophisticated CRDT approach
-        const roomState = this.canvasStates.get(roomId);
-        if (!roomState) return incomingOperation;
-        
-        // Find insertion point based on timestamp
-        const insertionIndex = roomState.operations.findIndex(
-            op => op.timestamp > incomingOperation.timestamp
-        );
-        
-        if (insertionIndex === -1) {
-            roomState.operations.push(incomingOperation);
-        } else {
-            roomState.operations.splice(insertionIndex, 0, incomingOperation);
-        }
-        
-        roomState.index = roomState.operations.length - 1;
-        
-        return insertionIndex === -1 ? roomState.operations.length - 1 : insertionIndex;
-    }
+    
 }
 
 module.exports = DrawingState;

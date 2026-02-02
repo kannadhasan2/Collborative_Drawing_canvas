@@ -324,40 +324,40 @@ class DrawingCanvas{
 
 
     undo({ silent = false } = {}) {
-  if (this.historyIndex > 0) {
-    this.historyIndex--;
-    this.restoreFromHistory();
+        if (this.historyIndex > 0) {
+            this.historyIndex--;
+            this.restoreFromHistory();
 
-    if (!silent && window.websocketManager?.isConnected) {
-      window.websocketManager.sendAction('undo');
+            if (!silent && window.websocketManager?.isConnected) {
+                window.websocketManager.sendAction('undo');
+            }
+        }
     }
-  }
-}
 
-redo({ silent = false } = {}) {
-  if (this.historyIndex < this.localHistory.length - 1) {
-    this.historyIndex++;
-    this.restoreFromHistory();
+    redo({ silent = false } = {}) {
+        if (this.historyIndex < this.localHistory.length - 1) {
+            this.historyIndex++;
+            this.restoreFromHistory();
 
-    if (!silent && window.websocketManager?.isConnected) {
-      window.websocketManager.sendAction('redo');
+            if (!silent && window.websocketManager?.isConnected) {
+                window.websocketManager.sendAction('redo');
+            }
+        }
     }
-  }
-}
 
-clearCanvas({ silent = false } = {}) {
-  this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  this.ctx.fillStyle = '#fff';
-  this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    clearCanvas({ silent = false } = {}) {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-  this.localHistory = [];
-  this.historyIndex = -1;
-  this.saveToHistory();
+        this.localHistory = [];
+        this.historyIndex = -1;
+        this.saveToHistory();
 
-  if (!silent && window.websocketManager?.isConnected) {
-    window.websocketManager.sendAction('clear');
-  }
-}
+        if (!silent && window.websocketManager?.isConnected) {
+            window.websocketManager.sendAction('clear');
+        }
+    }
 
     
     restoreFromHistory() {
