@@ -1,7 +1,7 @@
 # Collaborative Canvas Architecture
 
 ## 1. High Level Design
-
+```
 ┌───────────────────────────┐             Socket.IO            ┌───────────────────────────┐
 │         Frontend          │ ◄──────────────────────────────► │           Backend         │
 │         (Browser)         │                                  │          (Node.js)        │
@@ -25,10 +25,10 @@
 │  │ - cursor + drawing  │  │                                  │  │ - Undo/Redo index   │  │
 │  └─────────────────────┘  │                                  │  └─────────────────────┘  │
 └───────────────────────────┘                                  └───────────────────────────┘
-
+```
 
 ## 2. Event Flow (Draw + Undo)
-
+```
 User draw (mousemove)
   │
   ▼
@@ -66,27 +66,26 @@ RoomManager.handleAction()
         │
         ▼
 All clients clear + replay ops (consistent state)
+```
 
-
---
 ## Client Events:
 - **MouseDown** → Start drawing path
 - **MouseMove** → Draw line segment
 - **MouseUp** → End drawing path
 
 ## Data Serialization:
-    ```javascript
+  ```javascript
         {
-        type: 'draw',
-        tool: 'brush',
-        color: '#ff0000',
-        size: 5,
-        points: [{x: 100, y: 100}, {x: 110, y: 105}],
-        compositeOperation: 'source-over',
-        userId: 'user_123',
-        timestamp: 1625097600000
+          type: 'draw',
+          tool: 'brush',
+          color: '#ff0000',
+          size: 5,
+          points: [{x: 100, y: 100}, {x: 110, y: 105}],
+          compositeOperation: 'source-over',
+          userId: 'user_123',
+          timestamp: 1625097600000
         }
-    ```
+  ```
 
 ## Real-time Synchronization
 - Client sends drawing event via WebSocket
