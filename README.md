@@ -12,7 +12,7 @@ https://collborative-drawing-canvas.vercel.app/
 
 ### Core Features
 - **Real-time Drawing**: See others' drawings as they happen
-- **Multiple Tools**: Brush, eraser, rectangle, circle, line
+- **Multiple Tools**: Brush, eraser, line
 - **Color Palette**: Predefined colors + custom color picker
 - **Brush Size Control**: Adjustable brush/eraser size
 - **User Presence**: See who's online and their cursor positions
